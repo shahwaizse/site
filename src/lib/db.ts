@@ -1,16 +1,21 @@
-import { createClient } from "@libsql/client";
+import { createClient, type Client } from "@libsql/client";
 
-const url = import.meta.env.TURSO_DATABASE_URL ?? process.env.TURSO_DATABASE_URL;
-const authToken =
-  import.meta.env.TURSO_AUTH_TOKEN ?? process.env.TURSO_AUTH_TOKEN;
+let _client: Client | undefined;
 
-if (!url) {
-  throw new Error("TURSO_DATABASE_URL is not set");
+function getClient(): Client {
+  if (!_client) {
+    const url = process.env.TURSO_DATABASE_URL;
+    const authToken = process.env.TURSO_AUTH_TOKEN;
+    if (!url) throw new Error("TURSO_DATABASE_URL is not set");
+    _client = createClient({ url, authToken });
+  }
+  return _client;
 }
 
-export const db = createClient({
-  url,
-  authToken,
+export const db = new Proxy({} as Client, {
+  get(_t, prop) {
+    return Reflect.get(getClient(), prop);
+  },
 });
 
 export type KbDocument = {
