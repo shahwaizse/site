@@ -1,0 +1,46 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { isAuthed } from "@/lib/auth";
+
+export const prerender = false;
+
+if (isAuthed(Astro.request)) {
+  return Astro.redirect("/dashboard");
+}
+
+const url = new URL(Astro.request.url);
+const failed = url.searchParams.get("error") === "1";
+---
+
+<Layout title="dashboard — shahwaiz">
+  <div class="max-w-sm mx-auto mt-10">
+    <h1 class="font-serif text-2xl tracking-tight mb-2">dashboard</h1>
+    <p class="text-fg-muted text-sm mb-8">sign in to manage the knowledge base.</p>
+
+    <form
+      method="POST"
+      action="/api/auth/login"
+      class="flex flex-col gap-3"
+    >
+      <input
+        type="password"
+        name="password"
+        placeholder="password"
+        autocomplete="current-password"
+        required
+        class="w-full px-4 py-3 rounded-xl bg-bg-elevated border border-border-subtle focus:border-border outline-none text-fg placeholder:text-fg-subtle"
+      />
+      <button
+        type="submit"
+        class="w-full px-4 py-3 rounded-xl bg-fg text-bg font-medium hover:bg-fg-muted transition-colors"
+      >
+        sign in
+      </button>
+      {
+        failed && (
+          <p class="text-xs text-red-300 text-center">incorrect password.</p>
+        )
+      }
+    </form>
+  </div>
+</Layout>

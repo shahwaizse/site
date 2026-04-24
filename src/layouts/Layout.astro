@@ -1,0 +1,85 @@
+---
+import "@/styles/global.css";
+import { ClientRouter } from "astro:transitions";
+
+type Props = {
+  title?: string;
+  description?: string;
+};
+
+const {
+  title = "Shahwaiz",
+  description = "Shahwaiz's corner of the internet.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="bg-bg">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    {/* Fonts: Fraunces (serif display) + Inter (sans body) */}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+
+    <title>{title}</title>
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+
+    <ClientRouter />
+  </head>
+  <body class="min-h-screen antialiased">
+    <div class="mx-auto max-w-2xl px-6 py-8 md:py-12">
+      <nav
+        class="mb-16 md:mb-20 flex items-center justify-between text-sm text-fg-muted"
+      >
+        <a
+          href="/"
+          class="font-serif text-fg hover:text-fg transition-colors tracking-tight text-base"
+        >
+          shahwaiz
+        </a>
+        <div class="flex items-center gap-6">
+          <a
+            href="/"
+            class="hover:text-fg transition-colors"
+            aria-current={Astro.url.pathname === "/" ? "page" : undefined}
+          >
+            home
+          </a>
+          <a
+            href="/blog"
+            class="hover:text-fg transition-colors"
+            aria-current={Astro.url.pathname.startsWith("/blog")
+              ? "page"
+              : undefined}
+          >
+            blog
+          </a>
+        </div>
+      </nav>
+
+      <main class="animate-fade-up">
+        <slot />
+      </main>
+
+      <footer
+        class="mt-24 pt-8 border-t border-border-subtle text-xs text-fg-subtle flex items-center justify-between"
+      >
+        <span>© {new Date().getFullYear()} Shahwaiz</span>
+        <span class="font-mono">shahwaiz.dev</span>
+      </footer>
+    </div>
+  </body>
+</html>

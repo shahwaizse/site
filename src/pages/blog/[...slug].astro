@@ -1,0 +1,60 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const fmt = new Intl.DateTimeFormat("en-US", {
+  month: "long",
+  day: "numeric",
+  year: "numeric",
+});
+---
+
+<Layout
+  title={`${post.data.title} — shahwaiz`}
+  description={post.data.description}
+>
+  <article>
+    <a
+      href="/blog"
+      class="text-xs text-fg-subtle hover:text-fg-muted transition-colors font-mono inline-block mb-8"
+    >
+      ← back to blog
+    </a>
+    <header class="mb-10">
+      <h1
+        class="font-serif text-3xl md:text-4xl tracking-tight leading-tight mb-3"
+      >
+        {post.data.title}
+      </h1>
+      <div
+        class="flex items-center gap-3 text-xs font-mono text-fg-subtle"
+      >
+        <time datetime={post.data.pubDate.toISOString()}>
+          {fmt.format(post.data.pubDate)}
+        </time>
+        {
+          post.data.tags.length > 0 && (
+            <span>· {post.data.tags.join(", ")}</span>
+          )
+        }
+      </div>
+    </header>
+
+    <div class="prose-minimal">
+      <Content />
+    </div>
+  </article>
+</Layout>

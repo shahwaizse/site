@@ -1,0 +1,66 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+  <rect width="400" height="400" fill="#000"/>
+
+  <!-- body: rounded blob -->
+  <path
+    d="M 110,400
+       L 110,310
+       Q 95,270 95,225
+       Q 92,150 118,105
+       Q 150,60 205,60
+       Q 260,62 290,110
+       Q 312,155 308,215
+       Q 305,275 300,330
+       Q 298,365 312,400 Z"
+    fill="#ffffff"
+    stroke="#000"
+    stroke-width="4"
+    stroke-linejoin="round"/>
+
+  <!-- eyes -->
+  <circle cx="170" cy="150" r="6.5" fill="#000"/>
+  <circle cx="235" cy="150" r="6.5" fill="#000"/>
+
+  <!-- mouth: small arched squiggle -->
+  <path
+    d="M 193,192 Q 200,199 207,192 Q 212,186 217,192"
+    fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- arm: thin line curving from body down around the cup -->
+  <path
+    d="M 130,300
+       Q 105,330 120,365
+       Q 135,395 195,390
+       Q 245,388 270,370"
+    fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- coffee cup body -->
+  <path
+    d="M 180,280
+       L 180,345
+       Q 180,360 195,360
+       L 255,360
+       Q 270,360 270,345
+       L 270,280 Z"
+    fill="#d9d9d9" stroke="#000" stroke-width="3.5" stroke-linejoin="round"/>
+
+  <!-- cup rim highlight -->
+  <line x1="180" y1="290" x2="270" y2="290" stroke="#000" stroke-width="1.5"/>
+
+  <!-- cup handle -->
+  <path
+    d="M 270,302 Q 298,302 298,325 Q 298,348 270,348"
+    fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- steam squiggles -->
+  <path
+    d="M 205,270
+       C 198,258 214,250 206,238
+       C 200,228 212,220 207,210"
+    fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"/>
+  <path
+    d="M 240,270
+       C 233,258 249,250 241,238
+       C 235,228 247,220 242,210"
+    fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"/>
+</svg>

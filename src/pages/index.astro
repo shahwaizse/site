@@ -1,0 +1,25 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Chatbot from "@/components/Chatbot";
+---
+
+<Layout
+  title="Shahwaiz"
+  description="Personal site of Shahwaiz. Ask anything."
+>
+  <section class="flex flex-col items-center text-center mb-10">
+    <h1
+      class="font-serif text-4xl md:text-5xl tracking-tight leading-tight mb-3"
+    >
+      hey, i'm shahwaiz.
+    </h1>
+    <p class="text-fg-muted text-base max-w-md">
+      builder, tinkerer, occasional writer. ask the bot below — it knows a lot
+      about me.
+    </p>
+  </section>
+
+  <section class="mt-6">
+    <Chatbot client:load />
+  </section>
+</Layout>

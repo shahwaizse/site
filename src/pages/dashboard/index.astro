@@ -1,0 +1,36 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import KbManager from "@/components/KbManager";
+import PfpUploader from "@/components/PfpUploader";
+import { isAuthed } from "@/lib/auth";
+
+export const prerender = false;
+
+if (!isAuthed(Astro.request)) {
+  return Astro.redirect("/dashboard/login");
+}
+---
+
+<Layout title="dashboard — shahwaiz">
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="font-serif text-2xl tracking-tight">dashboard</h1>
+      <p class="text-fg-muted text-sm mt-1">
+        the chatbot's knowledge base.
+      </p>
+    </div>
+    <form method="POST" action="/api/auth/logout">
+      <button
+        type="submit"
+        class="text-xs text-fg-subtle hover:text-fg-muted font-mono transition-colors"
+      >
+        sign out
+      </button>
+    </form>
+  </div>
+
+  <div class="space-y-8">
+    <PfpUploader client:load />
+    <KbManager client:load />
+  </div>
+</Layout>

@@ -1,0 +1,58 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const fmt = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+});
+---
+
+<Layout title="blog — shahwaiz" description="writing by shahwaiz">
+  <h1 class="font-serif text-3xl md:text-4xl tracking-tight mb-2">blog</h1>
+  <p class="text-fg-muted mb-10 text-sm">
+    mostly things i'm building or thinking about.
+  </p>
+
+  <ul class="divide-y divide-border-subtle">
+    {
+      posts.map((post) => (
+        <li class="py-5">
+          <a
+            href={`/blog/${post.slug}`}
+            class="group flex items-baseline justify-between gap-4"
+          >
+            <div class="min-w-0">
+              <h2 class="font-serif text-lg md:text-xl text-fg group-hover:text-accent transition-colors tracking-tight">
+                {post.data.title}
+              </h2>
+              {post.data.description && (
+                <p class="text-fg-muted text-sm mt-1 line-clamp-2">
+                  {post.data.description}
+                </p>
+              )}
+            </div>
+            <time
+              class="shrink-0 text-xs text-fg-subtle font-mono"
+              datetime={post.data.pubDate.toISOString()}
+            >
+              {fmt.format(post.data.pubDate)}
+            </time>
+          </a>
+        </li>
+      ))
+    }
+    {
+      posts.length === 0 && (
+        <li class="py-10 text-center text-fg-subtle text-sm">
+          no posts yet.
+        </li>
+      )
+    }
+  </ul>
+</Layout>
