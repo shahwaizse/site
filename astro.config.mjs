@@ -10,6 +10,9 @@ export default defineConfig({
   adapter: vercel({
     webAnalytics: { enabled: true },
   }),
+  security: {
+    checkOrigin: false,
+  },
   integrations: [
     react(),
     tailwind({ applyBaseStyles: false }),
