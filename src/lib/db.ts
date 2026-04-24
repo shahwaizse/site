@@ -14,7 +14,9 @@ function getClient(): Client {
 
 export const db = new Proxy({} as Client, {
   get(_t, prop) {
-    return Reflect.get(getClient(), prop);
+    const client = getClient();
+    const value = Reflect.get(client, prop);
+    return typeof value === "function" ? value.bind(client) : value;
   },
 });
 
