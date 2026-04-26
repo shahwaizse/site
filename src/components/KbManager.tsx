@@ -83,7 +83,7 @@ export default function KbManager() {
       {/* Upload form */}
       <form
         onSubmit={upload}
-        className="rounded-2xl border border-border-subtle bg-bg-elevated p-5 space-y-3"
+        className="rounded-2xl border border-border-subtle bg-bg-elevated p-6 space-y-3"
       >
         <div className="flex items-center justify-between">
           <h2 className="font-serif text-lg tracking-tight">add document</h2>

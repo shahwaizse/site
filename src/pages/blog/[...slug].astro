@@ -1,31 +1,42 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { getCollection } from "astro:content";
+import { getPublishedBlogPostBySlug } from "@/lib/blog";
 
-export const prerender = true;
+export const prerender = false;
 
-export async function getStaticPaths() {
-  const posts = await getCollection("blog", ({ data }) => !data.draft);
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: { post },
-  }));
+const slugParam = Astro.params.slug;
+const slug = Array.isArray(slugParam) ? slugParam.join("/") : slugParam ?? "";
+
+const dbPost = await getPublishedBlogPostBySlug(slug);
+
+const filePost = dbPost
+  ? null
+  : await getCollection("blog", ({ data }) => !data.draft).then((posts) =>
+      posts.find((post) => post.slug === slug)
+    );
+
+if (!dbPost && !filePost) {
+  return Astro.redirect("/blog");
 }
-
-const { post } = Astro.props;
-const { Content } = await post.render();
 
 const fmt = new Intl.DateTimeFormat("en-US", {
   month: "long",
   day: "numeric",
   year: "numeric",
 });
+
+const title = dbPost ? dbPost.title : filePost!.data.title;
+const description = dbPost ? dbPost.description : filePost!.data.description;
+const date = dbPost
+  ? new Date(dbPost.published_at ?? dbPost.created_at)
+  : filePost!.data.pubDate;
+const tags = dbPost ? [] : filePost!.data.tags;
+const rendered = filePost ? await filePost.render() : null;
+const Content = rendered?.Content;
 ---
 
-<Layout
-  title={`${post.data.title} — shahwaiz`}
-  description={post.data.description}
->
+<Layout title={`${title} — shahwaiz`} description={description}>
   <article>
     <a
       href="/blog"
@@ -37,24 +48,18 @@ const fmt = new Intl.DateTimeFormat("en-US", {
       <h1
         class="font-serif text-3xl md:text-4xl tracking-tight leading-tight mb-3"
       >
-        {post.data.title}
+        {title}
       </h1>
-      <div
-        class="flex items-center gap-3 text-xs font-mono text-fg-subtle"
-      >
-        <time datetime={post.data.pubDate.toISOString()}>
-          {fmt.format(post.data.pubDate)}
+      <div class="flex items-center gap-3 text-xs font-mono text-fg-subtle">
+        <time datetime={date.toISOString()}>
+          {fmt.format(date)}
         </time>
-        {
-          post.data.tags.length > 0 && (
-            <span>· {post.data.tags.join(", ")}</span>
-          )
-        }
+        {tags.length > 0 && <span>· {tags.join(", ")}</span>}
       </div>
     </header>
 
     <div class="prose-minimal">
-      <Content />
+      {dbPost ? <div class="whitespace-pre-wrap">{dbPost.content}</div> : Content && <Content />}
     </div>
   </article>
 </Layout>

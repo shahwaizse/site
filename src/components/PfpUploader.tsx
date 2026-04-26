@@ -43,7 +43,7 @@ export default function PfpUploader() {
   }
 
   return (
-    <div className="rounded-2xl border border-border-subtle bg-bg-elevated p-5">
+    <div className="rounded-2xl border border-border-subtle bg-bg-elevated p-6">
       <div className="flex items-center gap-4">
         <div className="w-16 h-16 rounded-full bg-bg-subtle border border-border-subtle overflow-hidden shrink-0">
           <img

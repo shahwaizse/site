@@ -2,6 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import KbManager from "@/components/KbManager";
 import PfpUploader from "@/components/PfpUploader";
+import BlogManager from "@/components/BlogManager";
 import { isAuthed } from "@/lib/auth";
 
 export const prerender = false;
@@ -16,7 +17,7 @@ if (!isAuthed(Astro.request)) {
     <div>
       <h1 class="font-serif text-2xl tracking-tight">dashboard</h1>
       <p class="text-fg-muted text-sm mt-1">
-        the chatbot's knowledge base.
+        manage profile, knowledge base, and blog posts.
       </p>
     </div>
     <form method="POST" action="/api/auth/logout">
@@ -31,6 +32,7 @@ if (!isAuthed(Astro.request)) {
 
   <div class="space-y-8">
     <PfpUploader client:load />
+    <BlogManager client:load />
     <KbManager client:load />
   </div>
 </Layout>
