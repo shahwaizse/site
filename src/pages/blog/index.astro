@@ -1,9 +1,30 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { getCollection } from "astro:content";
+import { listPublishedBlogPosts } from "@/lib/blog";
 
-const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+export const prerender = false;
+
+const filePosts = (await getCollection("blog", ({ data }) => !data.draft)).map(
+  (post) => ({
+    kind: "file" as const,
+    slug: post.slug,
+    title: post.data.title,
+    description: post.data.description ?? "",
+    pubDate: post.data.pubDate,
+  })
+);
+
+const dbPosts = (await listPublishedBlogPosts()).map((post) => ({
+  kind: "db" as const,
+  slug: post.slug,
+  title: post.title,
+  description: post.description,
+  pubDate: new Date(post.published_at ?? post.created_at),
+}));
+
+const posts = [...dbPosts, ...filePosts].sort(
+  (a, b) => b.pubDate.valueOf() - a.pubDate.valueOf()
 );
 
 const fmt = new Intl.DateTimeFormat("en-US", {
@@ -29,19 +50,19 @@ const fmt = new Intl.DateTimeFormat("en-US", {
           >
             <div class="min-w-0">
               <h2 class="font-serif text-lg md:text-xl text-fg group-hover:text-accent transition-colors tracking-tight">
-                {post.data.title}
+                {post.title}
               </h2>
-              {post.data.description && (
+              {post.description && (
                 <p class="text-fg-muted text-sm mt-1 line-clamp-2">
-                  {post.data.description}
+                  {post.description}
                 </p>
               )}
             </div>
             <time
               class="shrink-0 text-xs text-fg-subtle font-mono"
-              datetime={post.data.pubDate.toISOString()}
+              datetime={post.pubDate.toISOString()}
             >
-              {fmt.format(post.data.pubDate)}
+              {fmt.format(post.pubDate)}
             </time>
           </a>
         </li>

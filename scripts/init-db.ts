@@ -75,10 +75,30 @@ async function main() {
     )
   `);
 
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS blog_posts (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      slug TEXT NOT NULL UNIQUE,
+      description TEXT NOT NULL DEFAULT '',
+      content TEXT NOT NULL,
+      draft INTEGER NOT NULL DEFAULT 0,
+      published_at INTEGER,
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL
+    )
+  `);
+
+  await db.execute(`
+    CREATE INDEX IF NOT EXISTS blog_posts_published_at_idx
+    ON blog_posts(published_at DESC)
+  `);
+
   console.log("✓ done.");
   console.log("  - kb_documents");
   console.log("  - kb_chunks (with vector index)");
   console.log("  - settings");
+  console.log("  - blog_posts");
 }
 
 main().catch((e) => {
